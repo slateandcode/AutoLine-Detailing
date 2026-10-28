@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #07080a;
+  --color-surface: #0f1115;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-ink: #edebe6;
+  --color-muted: #8b8e94;
+  --color-accent: #d9c9a3;
+
+  /* The one light section (Work brochure) */
+  --color-paper: #e4e5e7;
+  --color-paper-ink: #0e0f11;
+  --color-paper-muted: #575b62;
+  --color-paper-line: rgb(14 15 17 / 0.12);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Families come from lib/fonts.ts */
+  --font-display: var(--font-archivo), "Arial Narrow", Arial, sans-serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Heavy condensed display type: Archivo at width 75, weight 800. */
+@utility type-display {
+  font-family: var(--font-archivo), "Arial Narrow", Arial, sans-serif;
+  font-stretch: 75%;
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+
+@utility type-caption {
+  font-family: var(--font-archivo), "Arial Narrow", Arial, sans-serif;
+  font-stretch: 75%;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+@utility type-label {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Oversized outlined type used as a backdrop layer behind cars. */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--outline, rgb(255 255 255 / 0.13));
+}
+
+/* Content that swaps when a service is picked fades up once. */
+@utility swap-in {
+  animation: swap-in 420ms var(--ease-out-expo) both;
+}
+@keyframes swap-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  [id] {
+    scroll-margin-top: 72px;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Lights on: the poster comes up from dark with a short fluorescent flicker, once. */
+.poster-img {
+  filter: brightness(0.06);
+}
+.poster-img.is-lit {
+  animation: lights-on 600ms linear both;
+}
+@keyframes lights-on {
+  0% { filter: brightness(0.06); }
+  18% { filter: brightness(0.55); }
+  26% { filter: brightness(0.18); }
+  40% { filter: brightness(0.8); }
+  48% { filter: brightness(0.62); }
+  100% { filter: brightness(1); }
+}
+
+/* Film overlays start hidden; the motion layer reveals them. */
+.film-caption,
+.film-sheet {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.poster-img {
+  object-position: var(--fx, 50%) 50%;
+}
+
+/* Tall screens: the frame sits in a band near the top, cropped toward the car. Mirrors MOBILE_RECT in lib/frames.ts. */
+@media (max-aspect-ratio: 4/5) {
+  .film-frame-rect {
+    top: 7%;
+    height: 66%;
+    bottom: auto;
+  }
+  .poster-img {
+    object-position: var(--fx-m, 50%) 50%;
+  }
+  .film-rect-fade {
+    background: linear-gradient(to bottom, var(--color-bg) 0%, rgb(7 8 10 / 0) 14%, rgb(7 8 10 / 0) 72%, var(--color-bg) 100%);
+  }
+}
+
+.film-static {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster-img,
+  .poster-img.is-lit {
+    filter: none;
+    animation: none;
+  }
+  .film-track {
+    height: auto;
+  }
+  .film-motion-only {
+    display: none !important;
+  }
+  .film-static {
+    display: block;
+  }
+  .swap-in {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Below-the-fold sections skip layout and paint until they near the viewport. Keeps first paint cheap on phones. */
+.cv-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1400px;
+}
+
+/* FAQ accordion */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+details[open] .faq-plus {
+  transform: rotate(45deg);
+}

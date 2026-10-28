@@ -1,0 +1,18 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.env*
+!.env.example
+
+# Pixara originals, enhance exports and local upscales stay out of git
+assets/raw/
+assets/enhance/
+assets/upscaled/
+
+# Lighthouse output
+lighthouse/
+
+# Third-party design references used while designing; not site content
+public/References/

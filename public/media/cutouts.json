@@ -1,0 +1,34 @@
+{
+  "cullinan": {
+    "width": 734,
+    "height": 396,
+    "crop": {
+      "x": 230,
+      "y": 112
+    }
+  },
+  "g500": {
+    "width": 838,
+    "height": 344,
+    "crop": {
+      "x": 144,
+      "y": 126
+    }
+  },
+  "rangerover": {
+    "width": 740,
+    "height": 390,
+    "crop": {
+      "x": 236,
+      "y": 110
+    }
+  },
+  "urus": {
+    "width": 754,
+    "height": 376,
+    "crop": {
+      "x": 202,
+      "y": 124
+    }
+  }
+}
